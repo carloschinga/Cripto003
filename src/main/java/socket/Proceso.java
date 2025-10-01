@@ -18,17 +18,15 @@ public class Proceso {
 
     @OnOpen
     public void onOpen(Session session) {
-        System.out.println(session.getId() + "Ha abierto una conexion");
         try {
             sessiones.add(session);
-            session.getBasicRemote().sendText("Conexion establecida");
+            session.getBasicRemote().sendText("{\"usuario\":\"sistema\",\"mensaje\":\"Conexion establecida\"}");
         } catch (IOException ex) {
         }
     }
 
     @OnMessage
     public void onMessage(String mensaje, Session session) {
-        System.out.println("Mensaje" + session.getId() + mensaje);
         try {
             for (Session s : sessiones) {
                 s.getBasicRemote().sendText( mensaje);
@@ -41,7 +39,6 @@ public class Proceso {
     @OnClose
     public void onClose(Session session) {
         sessiones.remove(session);
-        System.out.println("Session " + session.getId() + " ha terminado");
     }
 
 }

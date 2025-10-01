@@ -25,7 +25,8 @@
                 if (webSocket !== undefined && webSocket.readyState
                         !== WebSocket.CLOSED)
                 {
-                    writeResponse("WebSocket ya esta abierto");
+                    let mensaje={usuario:"sistema",mensaje:"WebSocket ya esta abierto"};
+                    writeResponse(mensaje);
                     return;
                 }
                 webSocket = new WebSocket("ws://"+ document.location.host+ document.location.pathname+"proceso");
@@ -37,12 +38,12 @@
                 };
                 webSocket.onmessage = function (event)
                 {
-                    alert(event.data);
                     writeResponse(event.data);
                 };
                 webSocket.onclose = function (event)
                 {
-                    writeResponse("Conexion cerrada");
+                    let mensaje={usuario:"sistema",mensaje:"Conexion Cerrada"};
+                    writeResponse(mensaje);
                 };
             }
             function send()
@@ -67,7 +68,8 @@
             }
             function writeResponse(text)
             {
-                messages.innerHTML += "<br/>" + text;
+                let obj = JSON.parse(text);
+                messages.innerHTML += "<br/>" + obj.usuario + " dice: " + obj.mensaje ;
             }
         </script>
     </body>
