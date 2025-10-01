@@ -1,10 +1,72 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Start Page</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Chat on Line</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <h4>Usuario:</h4>
+        <input type="text" id="usuarioinput">
+        <h4>Mensaje:</h4>
+        <input type="text" id="messageinput">
+        <div>
+            <p></p>
+            <p></p>
+            <button type="button" onclick="openSocket();">Open</button>
+            <button type="button" onclick="send();">Send</button>
+            <button type="button" onclick="closeSocket();">Close</button>
+        </div>
+        <div id="messages"></div>
+        <script type="text/javascript">
+            var webSocket;
+            var messages = document.getElementById("messages");
+            function openSocket() {
+                if (webSocket !== undefined && webSocket.readyState
+                        !== WebSocket.CLOSED)
+                {
+                    writeResponse("WebSocket ya esta abierto");
+                    return;
+                }
+                webSocket = new WebSocket("ws://"+ document.location.host+ document.location.pathname+"proceso");
+                webSocket.onopen = function (event)
+                {
+                    if (event.data === undefined)
+                        return;
+                    writeResponse(event.data);
+                };
+                webSocket.onmessage = function (event)
+                {
+                    writeResponse(event.data);
+                };
+                webSocket.onclose = function (event)
+                {
+                    writeResponse("Conexion cerrada");
+                };
+            }
+            function send()
+            {
+                try {
+                    var usuario = document.getElementById("usuarioinput").value;
+                    var text = document.getElementById("messageinput").value;
+                    webSocket.send(usuario + " dice: " + text);
+                    document.getElementById("messageinput").value = "";
+                }
+                catch (err) {
+                }
+            }
+            function closeSocket()
+            {
+                try {
+                    webSocket.close();
+                }
+                catch (err) {
+                }
+            }
+            function writeResponse(text)
+            {
+                messages.innerHTML += "<br/>" + text;
+            }
+        </script>
     </body>
 </html>
