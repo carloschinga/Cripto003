@@ -18,6 +18,12 @@
             <button type="button" onclick="closeSocket();">Close</button>
         </div>
         <div id="messages"></div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/core-min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/sha256.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/enc-base64.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/pbkdf2.js"></script>
+        <script src="CifradoAES.js" type="text/javascript"></script>
         <script type="text/javascript">
             var webSocket;
             var messages = document.getElementById("messages");
@@ -51,7 +57,8 @@
                 try {
                     let usuario = document.getElementById("usuarioinput").value;
                     let text = document.getElementById("messageinput").value;
-                    let parametro={usuario:usuario, mensaje:text};
+                    let textCifrado=encrypt(text,"Secret Password");
+                    let parametro={usuario:usuario, mensaje:textCifrado};
                     webSocket.send(JSON.stringify(parametro));
                     document.getElementById("messageinput").value = "";
                 }
@@ -69,7 +76,8 @@
             function writeResponse(text)
             {
                 let obj = JSON.parse(text);
-                messages.innerHTML += "<br/>" + obj.usuario + " dice: " + obj.mensaje ;
+                let mensajedescifrado=decrypt(obj.mensaje,"Secret Password");
+                messages.innerHTML += "<br/>" + obj.usuario + " dice: " + mensajedescifrado ;
             }
         </script>
     </body>
