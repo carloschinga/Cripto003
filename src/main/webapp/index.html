@@ -37,6 +37,7 @@
                 };
                 webSocket.onmessage = function (event)
                 {
+                    alert(event.data);
                     writeResponse(event.data);
                 };
                 webSocket.onclose = function (event)
@@ -47,9 +48,10 @@
             function send()
             {
                 try {
-                    var usuario = document.getElementById("usuarioinput").value;
-                    var text = document.getElementById("messageinput").value;
-                    webSocket.send(usuario + " dice: " + text);
+                    let usuario = document.getElementById("usuarioinput").value;
+                    let text = document.getElementById("messageinput").value;
+                    let parametro={usuario:usuario, mensaje:text};
+                    webSocket.send(JSON.stringify(parametro));
                     document.getElementById("messageinput").value = "";
                 }
                 catch (err) {
