@@ -76,7 +76,7 @@
             function writeResponse(text)
             {
                 let obj = JSON.parse(text);
-                let mensajedescifrado=decrypt(obj.mensaje,"Secret Password");
+                let mensajedescifrado=decrypt(obj.mensaje,"Secret Password").toString(CryptoJS.enc.Utf8);
                 messages.innerHTML += "<br/>" + obj.usuario + " dice: " + mensajedescifrado ;
             }
         </script>
